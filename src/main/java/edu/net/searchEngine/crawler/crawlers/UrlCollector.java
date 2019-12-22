@@ -1,5 +1,6 @@
 package edu.net.searchEngine.crawler.crawlers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,8 +19,8 @@ public class UrlCollector {
 		String url = "http://cec.jmu.edu.cn/";
 		String cssSelector = ".menu0_0_";
 		List<String> menu = null;
-		List<String> list = new ArrayList<>();
-		BufferedResultWriterDao linkJDBCWriter = new LinksJDBCWriter(200);
+		List<String> list = null;
+		BufferedResultWriterDao linkJDBCWriter = new LinksJDBCWriter(400);
 		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
 		CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(cm).build();
 		LinksListWriter tempListWriter = new LinksListWriter();
@@ -35,9 +36,6 @@ public class UrlCollector {
 		}
 		menu = new ArrayList<String>(tempListWriter.getLinks());
 		tempListWriter.clear();
-		for (String e : menu) {
-			System.out.println(e);
-		}
 		/**
 		 * 2. Menu
 		 * URL的形式是http://cec.jmu.edu.cn/list.jsp?urltype=tree.TreeTempUrl&wbtreeid=1005
@@ -49,13 +47,11 @@ public class UrlCollector {
 		for (int i = 0; i < listCrawler.length; i++) {
 			String menuUrl = menu.get(i);
 			if(menuUrl.contains("?")) {
-				System.out.println(menu.get(i)+"&a2c=1000000");
 				listCrawler[i] = new SingleCrawler(menu.get(i)+"&a3c=1000000&a2c=10000000", "a[href~=^info/[0-9]+/[0-9]+\\.htm]", httpClient, tempListWriter);
 				listCrawler[i].start();
 			}
 			else {
 				listCrawler[i] = null;
-				list.add(menuUrl);
 			}
 		}
 		for(int i = 0; i < listCrawler.length; i++) {
@@ -67,13 +63,31 @@ public class UrlCollector {
 				}
 			}
 		}
-		Set<String> s = new HashSet<>();
-		for(String e : tempListWriter.getLinks()) {
-			s.add(e);
+		list = new ArrayList<>(tempListWriter.getLinks());
+		tempListWriter.clear();
+		/**
+		 * 
+		 */
+		SingleCrawler[] documentCrawler = new SingleCrawler[list.size()];
+		for (int i = 0; i < documentCrawler.length; i++) {
+			String menuUrl = list.get(i);
+			documentCrawler[i] = new SingleCrawler(list.get(i), "", httpClient, linkJDBCWriter);
+			documentCrawler[i].start();
 		}
-		System.out.println(s.size());
-		for(String e : s) {
-			System.out.println(e);
+		for(int i = 0; i < documentCrawler.length; i++) {
+			if(documentCrawler[i] != null) {
+				try {
+					documentCrawler[i].join();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
 		}
+		try {
+			linkJDBCWriter.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
 	}
 }

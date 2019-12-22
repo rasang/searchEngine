@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import crawler.SearchResultEntry;
 import edu.net.searchEngine.crawler.dao.BufferedResultWriterDao;
@@ -34,7 +35,9 @@ public class LinksJDBCWriter implements BufferedResultWriterDao{
 				return;
 			}
 		}
-		SearchResultEntry entry = new SearchResultEntry(url, doc.title(), doc.text());
+		Elements timeSpan = doc.select(".timestyle124904");
+		String time = timeSpan.get(0).text();
+		SearchResultEntry entry = new SearchResultEntry(url, doc.title(), doc.text(),time);
 		this.linkResult.add(entry);
 	}
 
@@ -45,7 +48,7 @@ public class LinksJDBCWriter implements BufferedResultWriterDao{
 		Connection conn = null;
 		PreparedStatement pstat = null;
 		
-		String sql = "insert ignore into search_engine (url,title,text) values (?,?,?);";
+		String sql = "insert into search_engine (url,title,text,time) values (?,?,?,?);";
 		try {
 			conn = MysqlHelper.getConnection();
 			pstat = conn.prepareStatement(sql);
@@ -53,6 +56,7 @@ public class LinksJDBCWriter implements BufferedResultWriterDao{
 				pstat.setString(1, e.getUrl());
 				pstat.setString(2,e.getTitle());
 				pstat.setString(3, e.getText());
+				pstat.setString(4, e.getTime());
 				pstat.addBatch();
 			}
 			pstat.executeBatch();
@@ -63,6 +67,11 @@ public class LinksJDBCWriter implements BufferedResultWriterDao{
 		 }finally{
 			 MysqlHelper.realeaseAll(null,pstat, conn);
 		}
+	}
+
+	@Override
+	public List getLinks() {
+		return this.linkResult;
 	}
 	
 }

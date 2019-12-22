@@ -42,39 +42,44 @@ public class SingleCrawler extends Thread {
 		try (CloseableHttpResponse response = httpClient.execute(this.httpGet, this.context)) {
 			HttpEntity entity = response.getEntity();
 			Document doc = Jsoup.parse(EntityUtils.toString(entity, "utf8"));
-			Elements links = doc.select(this.cssSelector);
-			for (Element link : links) {
-				String newHref = link.attr("href");
-				String httpPattern = "^http";
-				Pattern p = Pattern.compile(httpPattern);
-				Matcher m = p.matcher(newHref);
-				if(m.find())
-					continue;
-				String newUrl = null;
-				/**
-				 *  判断href是相对路径还是决定路径，以及是否是传参
-				 */
-				if(newHref.length()>=1 &&  newHref.charAt(0)=='?') {
-					newUrl = this.url.substring(0, this.url.indexOf('?')) + newHref;
-				}
-				else if(newHref.length()>=1 &&  newHref.charAt(0)=='/') {
-					Matcher matcher = Pattern.compile("http(s)?://.+?/").matcher(this.url);
-					if(matcher.find()) {
-						String rootUrl = matcher.group(0);
-						newUrl = rootUrl + newHref.substring(1);
+			if(this.cssSelector == "") {
+				this.LinksWriter.write(this.url, doc);
+			}
+			else {
+				Elements links = doc.select(this.cssSelector);
+				for (Element link : links) {
+					String newHref = link.attr("href");
+					String httpPattern = "^http";
+					Pattern p = Pattern.compile(httpPattern);
+					Matcher m = p.matcher(newHref);
+					if(m.find())
+						continue;
+					String newUrl = null;
+					/**
+					 *  判断href是相对路径还是决定路径，以及是否是传参
+					 */
+					if(newHref.length()>=1 &&  newHref.charAt(0)=='?') {
+						newUrl = this.url.substring(0, this.url.indexOf('?')) + newHref;
+					}
+					else if(newHref.length()>=1 &&  newHref.charAt(0)=='/') {
+						Matcher matcher = Pattern.compile("http(s)?://.+?/").matcher(this.url);
+						if(matcher.find()) {
+							String rootUrl = matcher.group(0);
+							newUrl = rootUrl + newHref.substring(1);
+						}
+						else continue;
+					}
+					else if(newHref.length()>=1 &&  newHref.charAt(0)!='/'){
+						Matcher matcher = Pattern.compile("http(s)?://.+/").matcher(this.url);
+						if(matcher.find()) {
+							String rootUrl = matcher.group(0);
+							newUrl = rootUrl + newHref;
+						}
+						else continue;
 					}
 					else continue;
+					this.LinksWriter.write(newUrl, doc);
 				}
-				else if(newHref.length()>=1 &&  newHref.charAt(0)!='/'){
-					Matcher matcher = Pattern.compile("http(s)?://.+/").matcher(this.url);
-					if(matcher.find()) {
-						String rootUrl = matcher.group(0);
-						newUrl = rootUrl + newHref;
-					}
-					else continue;
-				}
-				else continue;
-				this.LinksWriter.write(newUrl, doc);
 			}
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();

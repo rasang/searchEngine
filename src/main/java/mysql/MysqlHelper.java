@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 
 public class MysqlHelper {
-	static final String driver = "com.mysql.cj.jdbc.Driver";
+	static final String driver = "com.mysql.jdbc.Driver";
 	static final String url = "jdbc:mysql://120.79.232.37:3306/search_engine";
 	static final String userName = "plumk";
 	static final String password = "plumk";
