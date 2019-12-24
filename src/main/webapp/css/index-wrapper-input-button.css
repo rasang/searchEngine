@@ -35,7 +35,7 @@
 }
 
 .search-input {
-  margin: auto;
+  left: -1px;
   width: 70%;
   height: 30px;
   font-size: 22px;

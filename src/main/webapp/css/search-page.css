@@ -1,0 +1,111 @@
+.research-wrapper {
+  margin-top: 10px;
+  float: left;
+  height: 35px;
+  width: 400px;
+  border: 4px solid #d62524;
+  border-radius: 50px;
+  text-align: center;
+}
+
+.research-input {
+  font-size: 18px;
+  margin-left: 10px;
+  margin-top: 3px;
+  border: 0;
+  outline: 0;
+  padding-left: 0px;
+  line-height: 50px;
+  width: 75%;
+  float: left;
+  height: 27px;
+  vertical-align: middle;
+}
+
+.research-button {
+  margin-top: 1px;
+  margin-right: 3px;
+  float: right;
+  width: 15%;
+  height: 32px;
+  vertical-align: middle;
+  color: aliceblue;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: large;
+  font-weight: 600;
+  background-color: #d62524;
+  border-radius: 50px;
+  text-align: center;
+}
+
+.research-button:hover {
+  background-color: #be1e1e;
+}
+
+.IT-logo {
+    margin-top: 10px;
+  float: left;
+  height: 60px;
+  vertical-align: middle;
+}
+
+.head {
+  float: left;
+}
+
+.search-result{
+    margin-top: 10px;
+    width: 100%;
+    border-top-style: ridge;
+    border-width: 5px;
+}
+
+.clear{
+    clear: both;
+}
+
+.search-count{
+  float: left;
+  font-size: 13px;
+  color: darkgrey; 
+  margin-top: 10px;
+}
+
+.filter{
+  margin-left: 27%;
+  margin-top: 10px;
+  display: inline-block;
+  position: relative;
+}
+
+.filter-button{
+  color: darkgray;
+  text-align: center;
+  font-size: 13px;
+}
+
+.filter-button:hover{
+  color: #d62524;
+}
+
+.filter-option{
+  font-size: 13px;
+  color: darkgray;
+  border-radius: 10px;
+  display: none;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+}
+
+.filter a:hover{
+  border-radius: 10px;
+  background-color: #d62524;
+}
+
+.filter-option a{
+  display: block;
+}
+
+.filter:hover .filter-option{
+  display: block;
+}

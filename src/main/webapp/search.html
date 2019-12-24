@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/index-wrapper-input-button.css" />
+    <link rel="stylesheet" href="css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="css/search-page.css" />
+    <link rel="icon" type="image/x-ico" href="img/logo.ico" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/autocomplete.js"></script>
+    <title>IT-Search</title>
+    <script></script>
+  </head>
+
+  <body>
+    <div class="head">
+      <form action="search.html" method="GET">
+        <img class="IT-logo" src="img/logo.png" height="50" />
+        <div class="research-wrapper">
+          <input
+            class="research-input"
+            type="text"
+            placeholder="请输入关键字"
+            name="keyword"
+            autocomplete="off"
+          />
+          <button class="research-button" onclick="submit">GO!</button>
+        </div>
+      </form>
+    </div>
+    <div class=clear></div>
+    <div class=search-result>
+      <div class="search-count">IT-Search为您找到相关结果约**个</div>
+      <div class="filter">
+        <div class="filter-button">时间不限 ▼</div>
+        <div class=clear></div>
+        <div class="filter-option">
+          <a style="text-align: center;">一周内</a>
+          <a style="text-align: center;">一月内</a>
+          <a style="text-align: center;">一年内</a>
+        </div>
+      </div>
+    </div></div>
+    <div class="copyright">
+      Copyright © 2019 Designed By PlumK
+    </div>
+  </body>
+</html>

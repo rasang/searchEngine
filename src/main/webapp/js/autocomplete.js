@@ -26,15 +26,12 @@ function getData(url) {
 }
 
 $(function () {
-  var recommandData;
-
-  $(".search-input").autocomplete({
-    source: recommandData
-  });
-
   $(".search-input").keyup(
     function(event){
       recommandData=JSON.parse(getData("test.txt"));
+      $(".search-input").autocomplete({
+        source: recommandData
+      });
     }
   )
 });
