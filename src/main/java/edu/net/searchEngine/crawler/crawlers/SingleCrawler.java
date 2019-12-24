@@ -17,7 +17,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import edu.net.searchEngine.crawler.dao.BufferedResultWriterDao;
+import edu.net.searchEngine.crawler.dao.ResultWriterDao;
 
 public class SingleCrawler extends Thread {
 	private final CloseableHttpClient httpClient;
@@ -25,10 +25,10 @@ public class SingleCrawler extends Thread {
 	private final HttpGet httpGet;
 	private String cssSelector;
 	private String url;
-	BufferedResultWriterDao LinksWriter = null;
+	private ResultWriterDao LinksWriter = null;
 
 	public SingleCrawler(String url, String cssSelector, CloseableHttpClient httpClient,
-			BufferedResultWriterDao LinksWriter) {
+			ResultWriterDao LinksWriter) {
 		this.url = url;
 		this.cssSelector = cssSelector;
 		this.httpClient = httpClient;

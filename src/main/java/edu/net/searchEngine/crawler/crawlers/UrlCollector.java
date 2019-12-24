@@ -1,26 +1,30 @@
 package edu.net.searchEngine.crawler.crawlers;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
-import edu.net.searchEngine.crawler.dao.BufferedResultWriterDao;
-import edu.net.searchEngine.crawler.dao.impl.LinksJDBCWriter;
+import crawler.SearchResultEntry;
+import edu.net.searchEngine.crawler.dao.ResultWriterDao;
 import edu.net.searchEngine.crawler.dao.impl.LinksListWriter;
+import edu.net.searchEngine.crawler.dao.impl.CrawlListWriter;
 
 public class UrlCollector {
-	public static void main(String[] args) {
+	
+	private static ResultWriterDao resultWriter;
+	
+	public UrlCollector(ResultWriterDao resultWriter) {
+		this.resultWriter = resultWriter;
+	}
+	
+	public static List<SearchResultEntry> crawl() {
 		String url = "http://cec.jmu.edu.cn/";
 		String cssSelector = ".menu0_0_";
 		List<String> menu = null;
 		List<String> list = null;
-		BufferedResultWriterDao linkJDBCWriter = new LinksJDBCWriter(400);
 		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
 		CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(cm).build();
 		LinksListWriter tempListWriter = new LinksListWriter();
@@ -70,8 +74,7 @@ public class UrlCollector {
 		 */
 		SingleCrawler[] documentCrawler = new SingleCrawler[list.size()];
 		for (int i = 0; i < documentCrawler.length; i++) {
-			String menuUrl = list.get(i);
-			documentCrawler[i] = new SingleCrawler(list.get(i), "", httpClient, linkJDBCWriter);
+			documentCrawler[i] = new SingleCrawler(list.get(i), "", httpClient, resultWriter);
 			documentCrawler[i].start();
 		}
 		for(int i = 0; i < documentCrawler.length; i++) {
@@ -83,11 +86,6 @@ public class UrlCollector {
 				}
 			}
 		}
-		try {
-			linkJDBCWriter.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		};
+		return resultWriter.getLinks();
 	}
 }
