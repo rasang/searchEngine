@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="css/search-wrapper-input-button.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-ico" href="img/logo.ico" />
+    <link href="css/jquery-ui.min.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/autocomplete.js"></script>
+    <title>IT-Search</title>
+    <script>
+    </script>
+  </head>
+
+  <body>
+    <div>
+      <div class="badge">
+        <img src="img/jmu.png" width="200" height="200" />
+      </div>
+      <form action="search.jsp">
+        <div class="search-wrapper">
+          <input
+            class="search-input"
+            type="text"
+            placeholder="请输入关键字"
+            name="keyword"
+            autocomplete="off"
+          />
+          <button class="search-button" onclick="getData('test');">
+            搜索一下
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="copyright">
+      Copyright © 2019 Designed By PlumK
+    </div>
+  </body>
+</html>
