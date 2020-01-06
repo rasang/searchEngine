@@ -13,19 +13,19 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 
 import crawler.SearchResultEntry;
 import edu.net.searchEngine.elasticsearch.EsClient;
-import edu.net.searchEngine.elasticsearch.dao.EsSerchDao;
+import edu.net.searchEngine.elasticsearch.dao.EsSearchDao;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
-public class EsSerch implements EsSerchDao{
+public class EsSearch implements EsSearchDao{
 	private JestClient jestClient;
 	private boolean isDateRangeQuery=false;
 	private String startDate=null;
 	private String closingDate=null;
 	
-	public EsSerch(){
+	public EsSearch(){
 		jestClient=EsClient.getJestClient();
 	}
 	

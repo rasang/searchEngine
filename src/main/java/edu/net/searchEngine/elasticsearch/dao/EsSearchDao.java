@@ -5,7 +5,7 @@ import java.util.List;
 
 import crawler.SearchResultEntry;
 
-public interface EsSerchDao {
+public interface EsSearchDao {
 	/**
 	 * 全文检索
 	 * @param queryString 要检索的字符串
