@@ -57,7 +57,7 @@ public class EsSerch implements EsSerchDao{
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field("title");
         highlightBuilder.field("text");
-        highlightBuilder.preTags("<em>").postTags("</em>");
+        highlightBuilder.preTags("<span style=\"color:red;\">").postTags("</span>");
         highlightBuilder.fragmentSize(200);
         searchSourceBuilder.highlighter(highlightBuilder);
 		
