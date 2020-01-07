@@ -27,31 +27,31 @@ public class EsSuggest implements EsSuggestDao{
 	 * @return 至多10条搜索建议
 	 */
 	public List<String> getSuggest(String prefix){
-		List<String> list=null;
+		List<String> suggestList=new ArrayList<String>();
 		SearchRequestBuilder searchRequestBuilder;
 		int size=10;
 		
 		//从历史搜索这获取搜索建议
 		searchRequestBuilder=client.prepareSearch(EsClient.suggestName);
-		list=this.returnSuggest(searchRequestBuilder, prefix, "text", size);
+		this.returnSuggest(searchRequestBuilder, suggestList, prefix, "text", size*3);
+		
 		
 		//当建议不足10条时从索引库中获取剩余建议
-		if(list.size()<10) {
+		if(suggestList.size()<10) {
 			searchRequestBuilder=client.prepareSearch(EsClient.indexName);
-			size-=list.size();
-			List<String> temp=this.returnSuggest(searchRequestBuilder, prefix, "title.suggest", size);
-			if(!temp.isEmpty()) {
-				list.addAll(temp);
-			}
+			size-=suggestList.size();
+			this.returnSuggest(searchRequestBuilder, suggestList, prefix, "title.suggest", size*3);
 		}
-	
-		return list;
+		if(suggestList.size()>10) {
+			return suggestList.subList(0, 10);
+		}else {
+			return suggestList;
+		}
 	}
 	
-	private List<String> returnSuggest(SearchRequestBuilder searchRequestBuilder,String prefix,String field,int size){
-		List<String> suggestList=new ArrayList<String>();
+	private void returnSuggest(SearchRequestBuilder searchRequestBuilder,List<String> suggestList,String prefix,String field,int size){
 		CompletionSuggestionBuilder completionSuggestionBuilder = new CompletionSuggestionBuilder(field);
-		// 前缀查询 每次返回最多10条数据
+		// 前缀查询 每次返回最多size条数据
 		completionSuggestionBuilder.prefix(prefix).size(size);
 		// "mysuggest"自定义名字
 		
@@ -64,16 +64,18 @@ public class EsSuggest implements EsSuggestDao{
 		List<? extends Suggest.Suggestion.Entry<? extends Suggest.Suggestion.Entry.Option>> list = searchResponse
 				.getSuggest().getSuggestion("mysuggest").getEntries();
 		if (list == null) {
-			return suggestList;
+			return;
 		} else {
 			// 转为list保存结果字符串
 			for (Suggest.Suggestion.Entry<? extends Suggest.Suggestion.Entry.Option> e : list) {
 				for (Suggest.Suggestion.Entry.Option option : e) {
-					suggestList.add(option.getText().toString());
+					String str=option.getText().toString();
+					if(!suggestList.contains(str)) {
+						suggestList.add(str);
+					}
 				}
 			}
 		}
-		return suggestList;
 	}
 	
 	/**
