@@ -28,7 +28,7 @@ public class EsClient {
 		if(jestClient==null) {
 			JestClientFactory factory = new JestClientFactory();  
 			factory.setHttpClientConfig(new HttpClientConfig
-					.Builder("http://localhost:9200")
+					.Builder("http://127.0.0.1:9200")
 					//.gson(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create())
 					.multiThreaded(true)
 					.readTimeout(10000)
@@ -57,7 +57,7 @@ public class EsClient {
 	public static TransportClient getTransportClient() throws UnknownHostException {
 		if(transportClient==null) {
 			transportClient = new PreBuiltTransportClient(Settings.EMPTY)
-					.addTransportAddress(new TransportAddress(InetAddress.getByName("127.0.0.1"), 9300));
+					.addTransportAddress(new TransportAddress(InetAddress.getByName("localhost"), 9300));
 		}
 		return transportClient;
 	}

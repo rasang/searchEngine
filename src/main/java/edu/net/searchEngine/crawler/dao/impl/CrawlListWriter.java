@@ -20,7 +20,7 @@ public class CrawlListWriter implements ResultWriterDao{
 	@Override
 	public synchronized void write(String url, Document doc)  {
 		Elements timeSpan = doc.select(".timestyle124904");
-		String time = timeSpan.get(0).text();
+		String time = timeSpan.get(0).text().substring(0,10);
 		SearchResultEntry entry = new SearchResultEntry(url, doc.title(), doc.text(),time);
 		this.linkResult.add(entry);
 	}
