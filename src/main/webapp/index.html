@@ -12,6 +12,13 @@
     <title>IT-Search</title>
     <script>
     </script>
+    <style>
+    	.ui-menu-item-wrapper{
+    		width: 350px;
+    		white-space:nowrap;
+    		overflow: hidden;
+    	}
+    </style>
   </head>
 
   <body>
@@ -19,15 +26,20 @@
       <div class="badge">
         <img src="img/jmu.png" width="200" height="200" />
       </div>
-      <form action="search.jsp" method="GET">
+      <form action="search.jsp" method="GET" enctype="application/x-www-form-urlencoded">
         <div class="search-wrapper">
           <input
+            id="input"
             class="search-input"
             type="text"
             placeholder="请输入关键字"
             name="keyword"
             autocomplete="off"
           />
+          <datalist id="suggestion">
+            
+          </datalist>
+          </datalist>
           <button class="search-button" onclick="submit">
             搜索一下
           </button>
@@ -39,3 +51,7 @@
     </div>
   </body>
 </html>
+<script>
+
+</script>
+  

@@ -35,21 +35,24 @@
 }
 
 .search-input {
+  margin-top: 2px;
   left: -1px;
   width: 70%;
-  height: 30px;
+  height: 28px;
   font-size: 22px;
   border: 0;
   outline: 0;
   padding-left: 0px;
-  line-height: 50px;
+  line-height: 48px;
 }
 
 .copyright {
+  width: 300px;
   position: absolute;
-  bottom: 30px;
+  bottom: 20px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  margin-left: -150px;
+  text-align: center;
   color: darkgray;
 }
 

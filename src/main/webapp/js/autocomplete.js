@@ -28,7 +28,7 @@ function getData(url) {
 $(function () {
   $(".search-input").keyup(
     function(event){
-      recommandData=JSON.parse(getData("test.txt"));
+      recommandData=JSON.parse(getData("suggest.jsp?term="+document.getElementById("input").value));
       $(".search-input").autocomplete({
         source: recommandData
       });
