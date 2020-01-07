@@ -7,6 +7,11 @@ import crawler.SearchResultEntry;
 
 public interface EsSearchDao {
 	/**
+	 * 返回搜索结果的总条数
+	 * @return 总搜索结果条数
+	 */
+	public long getResultNum();
+	/**
 	 * 全文检索
 	 * @param queryString 要检索的字符串
 	 * @param page 页码
