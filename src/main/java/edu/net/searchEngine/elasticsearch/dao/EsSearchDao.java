@@ -9,18 +9,20 @@ public interface EsSearchDao {
 	/**
 	 * 全文检索
 	 * @param queryString 要检索的字符串
+	 * @param page 页码
 	 * @return 检索结果
 	 */
-	public List<SearchResultEntry> fullTextSerch(String queryString);
+	public List<SearchResultEntry> fullTextSerch(String queryString,int page);
 	
 	/**
 	 * 带日期限制的全文检索
 	 * @param queryString 搜索字符串
+	 * @param page 页码
 	 * @param startDate 起始日期
 	 * @param closingDate 终止日期
 	 * @return 检索结果
 	 */
-	public List<SearchResultEntry> rangeSerch(String queryString,String startDate,String closingDate);
+	public List<SearchResultEntry> rangeSerch(String queryString,int page,String startDate,String closingDate);
 	
 	/**
 	 * 将搜索请求保存到历史搜索索引中

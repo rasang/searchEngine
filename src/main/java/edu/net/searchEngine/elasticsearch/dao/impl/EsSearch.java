@@ -24,17 +24,28 @@ public class EsSearch implements EsSearchDao{
 	private boolean isDateRangeQuery=false;
 	private String startDate=null;
 	private String closingDate=null;
+	//搜索结果数量
+	private long resultNum;
 	
 	public EsSearch(){
 		jestClient=EsClient.getJestClient();
 	}
 	
 	/**
+	 * 返回搜索结果的总条数
+	 * @return
+	 */
+	public long getResultNum() {
+		return this.resultNum;
+	}
+	
+	/**
 	 * 全文检索
 	 * @param queryString 搜索字符串
+	 * @param page 页码
 	 * @return 检索结果
 	 */
-	public List<SearchResultEntry> fullTextSerch(String queryString) {
+	public List<SearchResultEntry> fullTextSerch(String queryString,int page) {
 		//声明一个搜索请求体
 		SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
 		
@@ -62,8 +73,8 @@ public class EsSearch implements EsSearchDao{
         searchSourceBuilder.highlighter(highlightBuilder);
 		
 		//设置分页
-        searchSourceBuilder.from(0);
-        searchSourceBuilder.size(800);
+        searchSourceBuilder.from(page-1);
+        searchSourceBuilder.size(10);
         
         //构建Search对象
         Search search=new Search.Builder(searchSourceBuilder.toString())
@@ -76,21 +87,23 @@ public class EsSearch implements EsSearchDao{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        resultNum=searchResult.getTotal();
         return this.storageList(searchResult);
 	}
 	
 	/**
 	 * 带日期限制的全文检索
 	 * @param queryString 搜索字符串
+	 * @param page 页码
 	 * @param startDate 起始日期
 	 * @param closingDate 终止日期
 	 * @return 检索结果
 	 */
-	public List<SearchResultEntry> rangeSerch(String queryString,String startDate,String closingDate){
+	public List<SearchResultEntry> rangeSerch(String queryString,int page,String startDate,String closingDate){
 		this.isDateRangeQuery=true;
 		this.startDate=startDate;
 		this.closingDate=closingDate;
-		List<SearchResultEntry> list=this.fullTextSerch(queryString);
+		List<SearchResultEntry> list=this.fullTextSerch(queryString,page);
 		this.isDateRangeQuery=false;
 		return list;
 	}
