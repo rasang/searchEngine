@@ -33,7 +33,7 @@ public class EsSearch implements EsSearchDao{
 	
 	/**
 	 * 返回搜索结果的总条数
-	 * @return
+	 * @return 总搜索结果条数
 	 */
 	public long getResultNum() {
 		return this.resultNum;
@@ -73,7 +73,7 @@ public class EsSearch implements EsSearchDao{
         searchSourceBuilder.highlighter(highlightBuilder);
 		
 		//设置分页
-        searchSourceBuilder.from(page-1);
+        searchSourceBuilder.from((page-1)*10);
         searchSourceBuilder.size(10);
         
         //构建Search对象
