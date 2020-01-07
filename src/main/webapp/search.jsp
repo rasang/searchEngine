@@ -15,14 +15,16 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery-ui.min.js"></script>
     <script src="js/autocomplete.js"></script>
-    <script src="js/time-limit.js"></script>
+    <script src="js/searchFunction.js"></script>
     <title>IT-Search</title>
   </head>
 
   <body>
     <div class="head">
       <form action="search.jsp" method="GET">
+      <a href="/">
         <img class="IT-logo" src="img/logo.png" height="50" />
+      </a>
         <div class="research-wrapper">
           <input
             id="input"
@@ -40,21 +42,23 @@
     <div class="search-result">
       <div style="margin-left: 16.5%;" class="search-count">IT-Search为您找到相关结果约**个</div>
       <div class="filter">
-        <div class="filter-button">时间不限 ▼</div>
+        <div id="filter" class="filter-button">时间不限 ▼</div>
         <div class="clear"></div>
         <div class="filter-option">
-          <a style="text-align: center;">一天内</a>
-          <a style="text-align: center;">一周内</a>
-          <a style="text-align: center;">一月内</a>
-          <a style="text-align: center;">一年内</a>
+          <a style="text-align: center;" onclick="selectTime('day')">一天内</a>
+          <a style="text-align: center;" onclick="selectTime('week')">一周内</a>
+          <a style="text-align: center;" onclick="selectTime('month')">一月内</a>
+          <a style="text-align: center;" onclick="selectTime('year')">一年内</a>
         </div>
       </div>
     </div>
     <div class="clear"></div>
     <div>
     <% 
+    	String keyword = request.getParameter("keyword");
     	EsSearch search = new EsSearch();
-    	List<SearchResultEntry> result = search.fullTextSerch(request.getParameter("keyword"));
+    	search.inseartSearch(keyword);
+    	List<SearchResultEntry> result = search.fullTextSerch(keyword);
     	for(int i=0;i<result.size();i++){
     		out.println("<div class=\"result-container\">");
     		out.println("<a href=\""+result.get(i).getUrl()+"\" target=\"_blank\" class=\"title\">"+result.get(i).getTitle()+"</a>");
@@ -64,23 +68,37 @@
     		out.println("</div>");
     	}
     %>
-      <div class="result-container">
-        <a href="http://cec.jmu.edu.cn/info/1041/7853.htm" target="_blank" class="title">讲座：将芯比心 “机”智可以过人吗</a>
-        <div class="text">周昌乐，男、汉族，生于苏州太仓。自幼秉承传统国学，精通易理、深谙禅法、承继圣道,长期开设有《跨界论道：科学走进人文》通识课程，是“乐易心法”创始人、乐易读书活动的倡导者，致力于化导民众健康幸福生活。1990年毕业于北京大学理论计算机科学专业，获理学博士学位。现为厦门大学智能科学与技术系教授、博士生导师，2014年被评为厦门大学十位最受学生欢迎教师称号。长期从事人工智能及其多学科交叉领域的研究工作，目前主要开展心智仿造、圣学发明、禅法实证等方面的研究工作。先后被聘为计算机科学与技术、基础数学、语言学与应用语言学、中医诊断学、哲学（国学）等五个不同学科门类的博士生导师。是中国人工智能学会理事、福建省人工智能学会理事长、清华大学智能技术与系统国家重点实验室学术委员、浙江大学语言与认知研究中心学术委员、厦门市信息化专家组组长。受聘为浙江大学、上海中医药大学、重庆大学、汕头大学、苏州大学等十余所高校兼职教授。</div>
-        <div class="url">http://cec.jmu.edu.cn/info/1041/7853.htm</div>
-      </div>
-      <div class="result-container">
-        <a href="http://cec.jmu.edu.cn/info/1041/7853.htm" target="_blank" class="title">讲座：将芯比心 “机”智可以过人吗</a>
-        <div class="text">周昌乐，男、汉族，生于苏州太仓。自幼秉承传统国学，精通易理、深谙禅法、承继圣道,长期开设有《跨界论道：科学走进人文》通识课程，是“乐易心法”创始人、乐易读书活动的倡导者，致力于化导民众健康幸福生活。1990年毕业于北京大学理论计算机科学专业，获理学博士学位。现为厦门大学智能科学与技术系教授、博士生导师，2014年被评为厦门大学十位最受学生欢迎教师称号。长期从事人工智能及其多学科交叉领域的研究工作，目前主要开展心智仿造、圣学发明、禅法实证等方面的研究工作。先后被聘为计算机科学与技术、基础数学、语言学与应用语言学、中医诊断学、哲学（国学）等五个不同学科门类的博士生导师。是中国人工智能学会理事、福建省人工智能学会理事长、清华大学智能技术与系统国家重点实验室学术委员、浙江大学语言与认知研究中心学术委员、厦门市信息化专家组组长。受聘为浙江大学、上海中医药大学、重庆大学、汕头大学、苏州大学等十余所高校兼职教授。</div>
-        <div class="url">http://cec.jmu.edu.cn/info/1041/7853.htm</div>
-      </div>
     </div>
     <div class="clear"></div>
   </body>
+  <div>
+    <ul class="pagination">
+      <li><a onclick="turnPage(this)">«</a></li>
+      <li><a onclick="turnPage(this)">1</a></li>
+      <li><a class="active" href="#">2</a></li>
+      <li><a onclick="turnPage(this)">3</a></li>
+      <li><a onclick="turnPage(this)">4</a></li>
+      <li><a onclick="turnPage(this)">5</a></li>
+      <li><a onclick="turnPage(this)">6</a></li>
+      <li><a onclick="turnPage(this)">7</a></li>
+      <li><a onclick="turnPage(this)">»</a></li>
+    </ul>
+  </div>
   <div class="copyright-research-page">
     Copyright © 2019 Designed By PlumK
   </div>
 </html>
 <script>
-document.getElementById("input").setAttribute("value","<%=request.getParameter("keyword")%>");
+if(GetQueryString("timeLimit")!=null){ 
+    var option=GetQueryString("timeLimit");
+    if(option=="day")
+      document.getElementById("filter").innerHTML="一天内 ▼";
+    else if(option=="week")
+      document.getElementById("filter").innerHTML="一周内 ▼";
+    else if(option=="month")
+      document.getElementById("filter").innerHTML="一月内 ▼";
+    else if(option=="year")
+      document.getElementById("filter").innerHTML="一年内 ▼";
+  }
+document.getElementById("input").setAttribute("value","<%=keyword%>");
 </script>

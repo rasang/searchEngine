@@ -131,7 +131,7 @@
 }
 
 .title{
-  color: #0000ff;
+  color: #0000ff !important;
   font-size: 17px;
 }
 
@@ -150,3 +150,28 @@
   margin-top: 4px;
   color: green;
 }
+
+ul.pagination {
+  margin-top: 3%;
+  margin-left: 16.5%;
+  display: inline-block;
+  padding: 0;
+}
+
+ul.pagination li {display: inline;}
+
+ul.pagination li a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+ul.pagination li a.active {
+  background-color: #d62524;
+  color: white;
+  border-radius: 5px;
+}
+
+ul.pagination li a:hover:not(.active) {background-color: #ddd;}
