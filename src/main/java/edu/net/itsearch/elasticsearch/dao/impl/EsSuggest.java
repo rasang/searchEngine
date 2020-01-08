@@ -1,4 +1,4 @@
-package edu.net.searchEngine.elasticsearch.dao.impl;
+package edu.net.itsearch.elasticsearch.dao.impl;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -11,9 +11,13 @@ import org.elasticsearch.search.suggest.Suggest;
 import org.elasticsearch.search.suggest.SuggestBuilder;
 import org.elasticsearch.search.suggest.completion.CompletionSuggestionBuilder;
 
-import edu.net.searchEngine.elasticsearch.EsClient;
-import edu.net.searchEngine.elasticsearch.dao.EsSuggestDao;
-
+import edu.net.itsearch.elasticsearch.EsClient;
+import edu.net.itsearch.elasticsearch.dao.EsSuggestDao;
+/**
+ * 
+ * @author xingkyh
+ * @date 2020/01/08
+ */
 public class EsSuggest implements EsSuggestDao{
 	private TransportClient client;
 	
@@ -25,7 +29,8 @@ public class EsSuggest implements EsSuggestDao{
 	 * 获取至多10条搜索建议
 	 * @param prefix 搜索建议的前缀
 	 * @return 至多10条搜索建议
-	 */
+	 */	
+	@Override
 	public List<String> getSuggest(String prefix){
 		List<String> suggestList=new ArrayList<String>();
 		SearchRequestBuilder searchRequestBuilder;
@@ -37,7 +42,7 @@ public class EsSuggest implements EsSuggestDao{
 		
 		
 		//当建议不足10条时从索引库中获取剩余建议
-		if(suggestList.size()<10) {
+		if(suggestList.size()<size) {
 			searchRequestBuilder=client.prepareSearch(EsClient.indexName);
 			size-=suggestList.size();
 			this.returnSuggest(searchRequestBuilder, suggestList, prefix, "title.suggest", size);
@@ -76,7 +81,8 @@ public class EsSuggest implements EsSuggestDao{
 	
 	/**
 	 * 关闭client，释放资源
-	 */
+	 */	
+	@Override
 	public void close() {
 		EsClient.closeTransportClient();
 	}

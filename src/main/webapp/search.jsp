@@ -5,7 +5,7 @@
 <%@page import="java.util.Date"%>
 <%@page import="crawler.SearchResultEntry"%>
 <%@page import="java.util.List"%>
-<%@page import="edu.net.searchEngine.elasticsearch.dao.impl.EsSearch"%>
+<%@page import="edu.net.itsearch.elasticsearch.dao.impl.EsSearch"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>

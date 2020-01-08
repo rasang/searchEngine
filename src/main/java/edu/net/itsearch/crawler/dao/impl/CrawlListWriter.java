@@ -1,4 +1,4 @@
-package edu.net.searchEngine.crawler.dao.impl;
+package edu.net.itsearch.crawler.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +7,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import crawler.SearchResultEntry;
-import edu.net.searchEngine.crawler.dao.ResultWriterDao;
-
+import edu.net.itsearch.crawler.dao.ResultWriterDao;
+/**
+ * 
+ * @author PlumK
+ * @date 2020/01/08
+ */
 public class CrawlListWriter implements ResultWriterDao{
 
 	private List<SearchResultEntry> linkResult = null;
@@ -25,6 +29,7 @@ public class CrawlListWriter implements ResultWriterDao{
 		this.linkResult.add(entry);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List getLinks() {
 		return this.linkResult;

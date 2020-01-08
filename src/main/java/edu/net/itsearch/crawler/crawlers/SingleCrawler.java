@@ -1,4 +1,4 @@
-package edu.net.searchEngine.crawler.crawlers;
+package edu.net.itsearch.crawler.crawlers;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -17,24 +17,29 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import edu.net.searchEngine.crawler.dao.ResultWriterDao;
-
+import edu.net.itsearch.crawler.dao.ResultWriterDao;
+/**
+ * 
+ * @author PlumK
+ * @date 2020/01/08
+ */
 public class SingleCrawler extends Thread {
 	private final CloseableHttpClient httpClient;
 	private final HttpContext context;
 	private final HttpGet httpGet;
 	private String cssSelector;
 	private String url;
-	private ResultWriterDao LinksWriter = null;
+	private ResultWriterDao linksWriter = null;
+	private Pattern httpRegexPattern = Pattern.compile("http(s)?://.+?/");
 
 	public SingleCrawler(String url, String cssSelector, CloseableHttpClient httpClient,
-			ResultWriterDao LinksWriter) {
+			ResultWriterDao linksWriter) {
 		this.url = url;
 		this.cssSelector = cssSelector;
 		this.httpClient = httpClient;
 		httpGet = new HttpGet(url);
 		this.context = HttpClientContext.create();
-		this.LinksWriter = LinksWriter;
+		this.linksWriter = linksWriter;
 	}
 
 	@Override
@@ -43,7 +48,7 @@ public class SingleCrawler extends Thread {
 			HttpEntity entity = response.getEntity();
 			Document doc = Jsoup.parse(EntityUtils.toString(entity, "utf8"));
 			if(this.cssSelector == "") {
-				this.LinksWriter.write(this.url, doc);
+				this.linksWriter.write(this.url, doc);
 			}
 			else {
 				Elements links = doc.select(this.cssSelector);
@@ -52,8 +57,9 @@ public class SingleCrawler extends Thread {
 					String httpPattern = "^http";
 					Pattern p = Pattern.compile(httpPattern);
 					Matcher m = p.matcher(newHref);
-					if(m.find())
+					if(m.find()){
 						continue;
+					}
 					String newUrl = null;
 					/**
 					 *  判断href是相对路径还是决定路径，以及是否是传参
@@ -62,23 +68,29 @@ public class SingleCrawler extends Thread {
 						newUrl = this.url.substring(0, this.url.indexOf('?')) + newHref;
 					}
 					else if(newHref.length()>=1 &&  newHref.charAt(0)=='/') {
-						Matcher matcher = Pattern.compile("http(s)?://.+?/").matcher(this.url);
+						Matcher matcher = httpRegexPattern.matcher(this.url);
 						if(matcher.find()) {
 							String rootUrl = matcher.group(0);
 							newUrl = rootUrl + newHref.substring(1);
 						}
-						else continue;
+						else {
+							continue;
+						}
 					}
 					else if(newHref.length()>=1 &&  newHref.charAt(0)!='/'){
-						Matcher matcher = Pattern.compile("http(s)?://.+/").matcher(this.url);
+						Matcher matcher = httpRegexPattern.matcher(this.url);
 						if(matcher.find()) {
 							String rootUrl = matcher.group(0);
 							newUrl = rootUrl + newHref;
 						}
-						else continue;
+						else {
+							continue;
+						}
 					}
-					else continue;
-					this.LinksWriter.write(newUrl, doc);
+					else {
+						continue;
+					}
+					this.linksWriter.write(newUrl, doc);
 				}
 			}
 		} catch (ClientProtocolException e) {

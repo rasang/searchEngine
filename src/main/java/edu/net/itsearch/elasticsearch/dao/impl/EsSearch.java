@@ -1,4 +1,4 @@
-package edu.net.searchEngine.elasticsearch.dao.impl;
+package edu.net.itsearch.elasticsearch.dao.impl;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -14,19 +14,25 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 
 import crawler.SearchResultEntry;
-import edu.net.searchEngine.elasticsearch.EsClient;
-import edu.net.searchEngine.elasticsearch.dao.EsSearchDao;
+import edu.net.itsearch.elasticsearch.EsClient;
+import edu.net.itsearch.elasticsearch.dao.EsSearchDao;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
-
+/**
+ * 
+ * @author xingkyh
+ * @date 2020/01/08
+ */
 public class EsSearch implements EsSearchDao{
 	private JestClient jestClient;
 	private boolean isDateRangeQuery=false;
 	private String startDate=null;
 	private String closingDate=null;
-	//搜索结果数量
+	/**
+	 * 搜索结果数量
+	 */
 	private long resultNum;
 	
 	public EsSearch(){
@@ -36,7 +42,8 @@ public class EsSearch implements EsSearchDao{
 	/**
 	 * 返回搜索结果的总条数
 	 * @return 总搜索结果条数
-	 */
+	 */	
+	@Override
 	public long getResultNum() {
 		return this.resultNum;
 	}
@@ -46,7 +53,8 @@ public class EsSearch implements EsSearchDao{
 	 * @param queryString 搜索字符串
 	 * @param page 页码
 	 * @return 检索结果
-	 */
+	 */	
+	@Override
 	public List<SearchResultEntry> fullTextSerch(String queryString,int page) {
 		//声明一个搜索请求体
 		SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
@@ -60,7 +68,8 @@ public class EsSearch implements EsSearchDao{
 					.gte(this.startDate)  
 					.lte(this.closingDate)  
 					.includeLower(true)  
-					.includeUpper(true);//区间查询 
+					.includeUpper(true);
+					/**区间查询*/ 
 			boolQueryBuilder=boolQueryBuilder.filter(queryBuilder);
 		}
 		
@@ -100,7 +109,8 @@ public class EsSearch implements EsSearchDao{
 	 * @param startDate 起始日期
 	 * @param closingDate 终止日期
 	 * @return 检索结果
-	 */
+	 */	
+	@Override
 	public List<SearchResultEntry> rangeSerch(String queryString,int page,String startDate,String closingDate){
 		this.isDateRangeQuery=true;
 		this.startDate=startDate;
@@ -141,7 +151,8 @@ public class EsSearch implements EsSearchDao{
 	 * 将搜索请求保存到历史搜索索引中
 	 * @param queryString 搜索字符串
 	 * @throws IOException
-	 */
+	 */	
+	@Override
 	public void inseartSearch(String queryString) throws IOException {
 		HistorySearch historySearch=new HistorySearch(queryString);
 		//用MD5加密字符串生成唯一id
@@ -163,7 +174,8 @@ public class EsSearch implements EsSearchDao{
 	/**
 	 * 关闭jestClient
 	 * @throws IOException 
-	 */
+	 */	
+	@Override
 	public void close() throws IOException {
 		EsClient.closeJestClient();
 	}

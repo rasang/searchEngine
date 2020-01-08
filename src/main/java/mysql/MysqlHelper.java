@@ -7,21 +7,25 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-
+/**
+ * 
+ * @author PlumK
+ * @date 2020/01/08
+ */
 public class MysqlHelper {
-	static final String driver = "com.mysql.jdbc.Driver";
-	static final String url = "jdbc:mysql://120.79.232.37:3306/search_engine";
-	static final String userName = "plumk";
-	static final String password = "plumk";
+	static final String DRIVER = "com.mysql.jdbc.Driver";
+	static final String URL = "jdbc:mysql://120.79.232.37:3306/search_engine";
+	static final String USERNAME = "plumk";
+	static final String PASSWORD = "plumk";
 	
-	// 连接数据库
+	/** 连接数据库*/
 	public static Connection getConnection() throws SQLException{
 		Connection conn = null;
-			conn = DriverManager.getConnection(url, userName, password);
+			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 			return conn;
 	}
 	
-	// 断开数据库链接
+	/** 断开数据库链接*/
 	public static void closeConnection(Connection conn) {
 		if(conn != null) {
 			try {
@@ -33,7 +37,7 @@ public class MysqlHelper {
 		}
 	}
 	
-	// 释放资源
+	/** 释放资源*/
 	public static void realeaseAll(ResultSet rs, Statement st, Connection conn) {
 		if(rs != null) {
 			try {

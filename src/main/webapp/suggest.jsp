@@ -1,6 +1,6 @@
 <%@page import="com.alibaba.fastjson.JSON"%>
 <%@page import="java.util.List"%>
-<%@page import="edu.net.searchEngine.elasticsearch.dao.impl.EsSuggest"%>
+<%@page import="edu.net.itsearch.elasticsearch.dao.impl.EsSuggest"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 

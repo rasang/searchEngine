@@ -1,4 +1,4 @@
-package edu.net.searchEngine.crawler.crawlers;
+package edu.net.itsearch.crawler.crawlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,18 +8,22 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
 import crawler.SearchResultEntry;
-import edu.net.searchEngine.crawler.dao.ResultWriterDao;
-import edu.net.searchEngine.crawler.dao.impl.LinksListWriter;
-import edu.net.searchEngine.crawler.dao.impl.CrawlListWriter;
-
+import edu.net.itsearch.crawler.dao.ResultWriterDao;
+import edu.net.itsearch.crawler.dao.impl.LinksListWriter;
+/**
+ * 
+ * @author PlumK
+ * @date 2020/01/08
+ */
 public class UrlCollector {
 	
 	private static ResultWriterDao resultWriter;
 	
-	public UrlCollector(ResultWriterDao resultWriter) {
-		this.resultWriter = resultWriter;
+	public static void setresultWriter (ResultWriterDao resultWriter) {
+		UrlCollector.resultWriter = resultWriter;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static List<SearchResultEntry> crawl() {
 		String url = "http://cec.jmu.edu.cn/";
 		String cssSelector = ".menu0_0_";

@@ -1,15 +1,20 @@
-package edu.net.searchEngine.crawler.dao.impl;
+package edu.net.itsearch.crawler.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jsoup.nodes.Document;
 
-import edu.net.searchEngine.crawler.dao.ResultWriterDao;
-
+import edu.net.itsearch.crawler.dao.ResultWriterDao;
+/**
+ * 
+ * @author PlumK
+ * @date 2020/01/08
+ */
 public class LinksListWriter implements ResultWriterDao{
 	List<String> links = new ArrayList<>();
-
+	
+	@Override
 	public List<String> getLinks() {
 		return links;
 	}
