@@ -67,8 +67,10 @@
     		out.println("<a href=\""+result.get(i).getUrl()+"\" target=\"_blank\" class=\"title\">"+result.get(i).getTitle()+"</a>");
     		int index = result.get(i).getText().indexOf("<span style=\"color:red;\">");
     		out.println("<div class=\"text\">"+result.get(i).getText()+"</div>");
-    		out.println("<div class=\"url\">"+result.get(i).getUrl()+"</div>");
+    		out.println("<div style=\"float: left;\" class=\"url\">"+result.get(i).getUrl()+"</div>");
+    		out.println("<div style=\"float: left;color: grey;margin-left: 30px;margin-top: 4px;\">"+result.get(i).getTime()+"</div>");
     		out.println("</div>");
+    		out.println("<div class=\"clear\"></div>");
     	}
     %>
     </div>

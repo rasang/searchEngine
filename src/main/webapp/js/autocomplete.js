@@ -26,12 +26,14 @@ function getData(url) {
 }
 
 $(function () {
-  $(".search-input").keyup(
-    function(event){
-      recommandData=JSON.parse(getData("suggest.jsp?term="+document.getElementById("input").value));
-      $(".search-input").autocomplete({
-        source: recommandData
-      });
-    }
-  )
-});
+	  $(".search-input").keyup(
+	    function(event){
+	      setTimeout(function(){
+	        recommandData=JSON.parse(getData("suggest.jsp?term="+document.getElementById("input").value));
+	        $(".search-input").autocomplete({
+	          source: recommandData
+	        });
+	      },2000)
+	    }
+	  )
+	});
