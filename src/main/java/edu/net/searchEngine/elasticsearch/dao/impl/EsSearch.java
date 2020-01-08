@@ -1,6 +1,8 @@
 package edu.net.searchEngine.elasticsearch.dao.impl;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +144,19 @@ public class EsSearch implements EsSearchDao{
 	 */
 	public void inseartSearch(String queryString) throws IOException {
 		HistorySearch historySearch=new HistorySearch(queryString);
-		Index index=new Index.Builder(historySearch).index(EsClient.suggestName).type(EsClient.typeName).build();
+		//用MD5加密字符串生成唯一id
+		StringBuilder id=new StringBuilder();
+		try {
+			MessageDigest digest=MessageDigest.getInstance("MD5");
+			digest.update(queryString.getBytes());
+			byte[] hash=digest.digest();
+			for(byte b:hash) {
+				id.append(String.format("%02x", b));
+			}
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		Index index=new Index.Builder(historySearch).index(EsClient.suggestName).type(EsClient.typeName).id(id.toString()).build();
 		jestClient.execute(index);
 	}
 	

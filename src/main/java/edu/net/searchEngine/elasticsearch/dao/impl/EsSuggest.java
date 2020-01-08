@@ -33,20 +33,16 @@ public class EsSuggest implements EsSuggestDao{
 		
 		//从历史搜索这获取搜索建议
 		searchRequestBuilder=client.prepareSearch(EsClient.suggestName);
-		this.returnSuggest(searchRequestBuilder, suggestList, prefix, "text", size*3);
+		this.returnSuggest(searchRequestBuilder, suggestList, prefix, "text", size);
 		
 		
 		//当建议不足10条时从索引库中获取剩余建议
 		if(suggestList.size()<10) {
 			searchRequestBuilder=client.prepareSearch(EsClient.indexName);
 			size-=suggestList.size();
-			this.returnSuggest(searchRequestBuilder, suggestList, prefix, "title.suggest", size*3);
+			this.returnSuggest(searchRequestBuilder, suggestList, prefix, "title.suggest", size);
 		}
-		if(suggestList.size()>10) {
-			return suggestList.subList(0, 10);
-		}else {
-			return suggestList;
-		}
+		return suggestList;
 	}
 	
 	private void returnSuggest(SearchRequestBuilder searchRequestBuilder,List<String> suggestList,String prefix,String field,int size){
@@ -70,7 +66,7 @@ public class EsSuggest implements EsSuggestDao{
 			for (Suggest.Suggestion.Entry<? extends Suggest.Suggestion.Entry.Option> e : list) {
 				for (Suggest.Suggestion.Entry.Option option : e) {
 					String str=option.getText().toString();
-					if(!suggestList.contains(str)) {
+					if(suggestList.contains(str)) {
 						suggestList.add(str);
 					}
 				}
