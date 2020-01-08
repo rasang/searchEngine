@@ -43,6 +43,9 @@ public class UrlCollector {
 			e.printStackTrace();
 		}
 		menu = new ArrayList<String>(tempListWriter.getLinks());
+		for(String e:menu) {
+			System.out.println(e);
+		}
 		tempListWriter.clear();
 		/**
 		 * 2. Menu
