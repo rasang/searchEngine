@@ -1,24 +1,19 @@
 package test;
 
-import java.net.UnknownHostException;
-import java.util.List;
-
-import edu.net.searchEngine.elasticsearch.dao.EsSearchDao;
-import edu.net.searchEngine.elasticsearch.dao.impl.EsSearch;
-import edu.net.searchEngine.elasticsearch.dao.impl.EsSuggest;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class test{
 	public static void main(String[] args) {
-		try {
-			EsSuggest see=new EsSuggest();
-			List<String>list= see.getSuggest("厦门");
-			System.out.println(list.size());
-			for (int i = 0; i < list.size(); i++) {
-				System.out.println(list.get(i));
-			}
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Date d = new Date();
+		System.out.println(d);
+		Calendar c = Calendar.getInstance();
+		c.setTime(d);
+		c.add(Calendar.DATE, -7);
+		d = c.getTime();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String dateNowStr = sdf.format(d);
+		System.out.println("格式化后的日期：" + dateNowStr);
 	}
 }
