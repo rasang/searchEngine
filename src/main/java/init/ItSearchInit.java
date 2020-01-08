@@ -18,7 +18,7 @@ import edu.net.itsearch.elasticsearch.dao.impl.EsSuggest;
 public class ItSearchInit{
 	public static void main(String[] args) {
 		String suggestInitDate = "test";
-		UrlCollector.setresultWriter(new CrawlListWriter());
+		UrlCollector.setResultWriter(new CrawlListWriter());
 		List<SearchResultEntry> re = UrlCollector.crawl();
 		System.out.println("本次共爬取到"+re.size()+"条数据");
 		System.out.println("正在插入到Elasticsearch...");

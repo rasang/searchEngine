@@ -19,14 +19,14 @@ public class UrlCollector {
 	
 	private static ResultWriterDao resultWriter;
 	
-	public static void setresultWriter (ResultWriterDao resultWriter) {
+	public static void setResultWriter (ResultWriterDao resultWriter) {
 		UrlCollector.resultWriter = resultWriter;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public static List<SearchResultEntry> crawl() {
 		String url = "http://cec.jmu.edu.cn/";
-		String cssSelector = ".menu0_0_";
+		String cssSelector = "a[href~=\\.jsp\\?urltype=tree\\.TreeTempUrl&wbtreeid=[0-9]+]";
 		List<String> menu = null;
 		List<String> list = null;
 		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
