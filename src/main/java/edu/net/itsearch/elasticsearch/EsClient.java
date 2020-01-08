@@ -1,4 +1,4 @@
-package edu.net.searchEngine.elasticsearch;
+package edu.net.itsearch.elasticsearch;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -12,7 +12,11 @@ import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.HttpClientConfig;
-
+/**
+ * 
+ * @author xingkyh
+ * @date 2020/01/08
+ */
 public class EsClient {
 	public static String indexName="webpage";
 	public static String typeName="doc";

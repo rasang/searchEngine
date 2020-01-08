@@ -1,5 +1,9 @@
 package crawler;
-
+/**
+ * 
+ * @author PlumK
+ * @date 2020/01/08
+ */
 public class SearchResultEntry {
 	private String url;
 	private String title;

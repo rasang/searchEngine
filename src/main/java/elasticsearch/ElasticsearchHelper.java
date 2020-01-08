@@ -3,16 +3,20 @@ package elasticsearch;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
-
+/**
+ * 
+ * @author xingkyh
+ * @date 2020/01/08
+ */
 public class ElasticsearchHelper {
 	
 	private TransportClient client = null;
 	
+	@SuppressWarnings("resource")
 	public void connect() throws UnknownHostException {
 		// 创建客户端
 		client = new PreBuiltTransportClient(Settings.EMPTY)

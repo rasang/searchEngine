@@ -1,17 +1,22 @@
-package edu.net.searchEngine.elasticsearch.dao.impl;
+package edu.net.itsearch.elasticsearch.dao.impl;
 
 import java.io.IOException;
 import java.util.List;
 
 import crawler.SearchResultEntry;
-import edu.net.searchEngine.elasticsearch.EsClient;
-import edu.net.searchEngine.elasticsearch.dao.EsCreatIndexDao;
+import edu.net.itsearch.elasticsearch.EsClient;
+import edu.net.itsearch.elasticsearch.dao.EsCreatIndexDao;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.Index;
 import io.searchbox.indices.CreateIndex;
+import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.mapping.PutMapping;
-
+/**
+ * 
+ * @author xingkyh
+ * @date 2020/01/08
+ */
 public class EsCreatIndex implements EsCreatIndexDao{
 	private static JestClient jestClient;
 	
@@ -57,6 +62,7 @@ public class EsCreatIndex implements EsCreatIndexDao{
 	 * 关闭jestClient
 	 * @throws IOException
 	 */
+	@Override
 	public void close() throws IOException{
 		if(jestClient!=null) {
 			EsClient.closeJestClient();
@@ -67,7 +73,8 @@ public class EsCreatIndex implements EsCreatIndexDao{
 	 * 插入数据
 	 * @param e
 	 * @throws IOException 
-	 */
+	 */	
+	@Override
 	public void insertIndex(SearchResultEntry webpage) throws IOException {
 		Index index=new Index.Builder(webpage).index(EsClient.indexName).type(EsClient.typeName).build();
 		jestClient.execute(index);
@@ -77,7 +84,8 @@ public class EsCreatIndex implements EsCreatIndexDao{
 	 * 批量插入数据
 	 * @param list
 	 * @throws IOException
-	 */
+	 */	
+	@Override
 	public void bulkIndex(List<SearchResultEntry> list) throws IOException {
 		Bulk.Builder bulk=new Bulk.Builder();
 		for(SearchResultEntry e:list) {
@@ -87,5 +95,21 @@ public class EsCreatIndex implements EsCreatIndexDao{
 		jestClient.execute(bulk.build());
 	}
 	
+	/**
+	 * 删除索引
+	 * @throws IOException 
+	 */
+	@Override
+	public void deleteIndex() throws IOException {
+		jestClient.execute(new DeleteIndex.Builder(EsClient.indexName).build());
+	}
 	
+	/**
+	 * 删除历史搜索
+	 * @throws IOException
+	 */
+	@Override
+	public void deleteHistorySearch() throws IOException {
+		jestClient.execute(new DeleteIndex.Builder(EsClient.suggestName).build());
+	}
 }

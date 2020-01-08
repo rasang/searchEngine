@@ -1,7 +1,11 @@
-package edu.net.searchEngine.elasticsearch.dao;
+package edu.net.itsearch.elasticsearch.dao;
 
 import java.util.List;
-
+/**
+ * 
+ * @author xingkyh
+ * @date 2020/01/08
+ */
 public interface EsSuggestDao{
 	/**
 	 * 获取至多10条搜索建议
