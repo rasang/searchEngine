@@ -10,6 +10,7 @@ import io.searchbox.client.JestClient;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.Index;
 import io.searchbox.indices.CreateIndex;
+import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.mapping.PutMapping;
 /**
  * 
@@ -94,5 +95,21 @@ public class EsCreatIndex implements EsCreatIndexDao{
 		jestClient.execute(bulk.build());
 	}
 	
+	/**
+	 * 删除索引
+	 * @throws IOException 
+	 */
+	@Override
+	public void deleteIndex() throws IOException {
+		jestClient.execute(new DeleteIndex.Builder(EsClient.indexName).build());
+	}
 	
+	/**
+	 * 删除历史搜索
+	 * @throws IOException
+	 */
+	@Override
+	public void deleteHistorySearch() throws IOException {
+		jestClient.execute(new DeleteIndex.Builder(EsClient.suggestName).build());
+	}
 }

@@ -29,4 +29,16 @@ public interface EsCreatIndexDao {
 	 * @throws IOException
 	 */
 	public void close() throws IOException;
+	
+	/**
+	 * 删除索引
+	 * @throws IOException 
+	 */
+	public void deleteIndex() throws IOException;
+	
+	/**
+	 * 删除历史搜索
+	 * @throws IOException
+	 */
+	public void deleteHistorySearch() throws IOException;
 }
