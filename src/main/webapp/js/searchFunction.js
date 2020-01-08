@@ -73,13 +73,6 @@ function selectTime(time) {
 $(function(){
 	if(GetQueryString("timeLimit")!=null){ 
 	    var option=GetQueryString("timeLimit");
-	    if(option=="day")
-	      document.getElementById("filter").innerHTML="一天内 ▼";
-	    else if(option=="week")
-	      document.getElementById("filter").innerHTML="一周内 ▼";
-	    else if(option=="month")
-	      document.getElementById("filter").innerHTML="一月内 ▼";
-	    else if(option=="year")
-	      document.getElementById("filter").innerHTML="一年内 ▼";
+	    document.getElementById("test6").setAttribute("placeholder",option);
 	  }
 })

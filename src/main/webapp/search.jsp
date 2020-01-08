@@ -1,3 +1,5 @@
+<%@page import="io.searchbox.core.Search"%>
+<%@page import="org.elasticsearch.action.search.SearchRequest"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
@@ -16,6 +18,7 @@
 <link rel="stylesheet" href="css/search-page.css" />
 <link rel="icon" type="image/x-ico" href="img/logo.ico" />
 <script src="js/jquery.min.js"></script>
+<script src="laydate/laydate.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script src="js/autocomplete.js"></script>
 <script src="js/searchFunction.js"></script>
@@ -23,6 +26,15 @@
 </head>
 
 <body>
+	<style>
+		.demo-input{
+			text-align: center;
+			height: 15px; 
+			border: 2px solid #e6e6e6;  
+			background-color: #fff;  
+			border-radius: 20px;
+		}
+	</style>
 	<div class="head">
 		<form action="search.jsp" method="GET">
 			<a href="/"> <img class="IT-logo" src="img/logo.png" height="50" />
@@ -47,34 +59,8 @@
 			result = search.fullTextSerch(keyword,pageCount);
 		}
 		else{
-			Date dateNow = new Date();
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(dateNow);
-			Date startDate;
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			switch(timeLimit){
-				case "day":
-					calendar.add(Calendar.DATE,-1);
-					startDate = calendar.getTime();
-					result = search.rangeSerch(keyword, pageCount, format.format(startDate), format.format(dateNow));
-					break;
-				case "week":
-					calendar.add(Calendar.DATE,-7);
-					startDate = calendar.getTime();
-					result = search.rangeSerch(keyword, pageCount, format.format(startDate), format.format(dateNow));
-					break;
-				case "month":
-					calendar.add(Calendar.MONTH,-1);
-					startDate = calendar.getTime();
-					result = search.rangeSerch(keyword, pageCount, format.format(startDate), format.format(dateNow));
-					break;
-				case "year":
-					calendar.add(Calendar.YEAR,-1);
-					startDate = calendar.getTime();
-					result = search.rangeSerch(keyword, pageCount, format.format(startDate), format.format(dateNow));
-					break;
-				default:
-			}
+			String[] time = timeLimit.split(" - ");
+			result = search.rangeSerch(keyword, pageCount, time[0], time[1]);
 		}
 	}
     %>
@@ -84,19 +70,13 @@
 			IT-Search为您找到相关结果约<%=keyword==null?0:search.getResultNum() %>个
 		</div>
 		<div class="filter">
-			<div id="filter" class="filter-button">时间不限 ▼</div>
-			<div class="clear"></div>
-			<div class="filter-option">
-				<a style="text-align: center;" onclick="selectTime('day')">一天内</a> <a
-					style="text-align: center;" onclick="selectTime('week')">一周内</a> <a
-					style="text-align: center;" onclick="selectTime('month')">一月内</a> <a
-					style="text-align: center;" onclick="selectTime('year')">一年内</a>
-			</div>
+			<input type="text" autocomplete="off" readonly="true" class="demo-input" placeholder="时间不限" id="test6">
 		</div>
 	</div>
 	<div class="clear"></div>
 	<div>
 		<% 
+		if(result!=null)
     	for(int i=0;i<result.size();i++){
     		out.println("<div class=\"result-container\">");
     		out.println("<a href=\""+result.get(i).getUrl()+"\" target=\"_blank\" class=\"title\">"+result.get(i).getTitle()+"</a>");
@@ -119,17 +99,6 @@
 	PlumK</div>
 </html>
 <script>
-if(GetQueryString("timeLimit")!=null){ 
-    var option=GetQueryString("timeLimit");
-    if(option=="day")
-      document.getElementById("filter").innerHTML="一天内 ▼";
-    else if(option=="week")
-      document.getElementById("filter").innerHTML="一周内 ▼";
-    else if(option=="month")
-      document.getElementById("filter").innerHTML="一月内 ▼";
-    else if(option=="year")
-      document.getElementById("filter").innerHTML="一年内 ▼";
-  }
 document.getElementById("input").setAttribute("value","<%=keyword%>");
 page=GetQueryString("page");
 if(page==null) 
@@ -168,4 +137,8 @@ else{
 	}
 	if(page!=totalPage) document.getElementById("turn-page").innerHTML+="<li><a onclick=\"turnPage(this)\">"+"»"+"</a></li>";
 }
+laydate.render({
+	elem: '#test6'
+    ,range: true
+    });
 </script>

@@ -66,7 +66,7 @@ public class EsSuggest implements EsSuggestDao{
 			for (Suggest.Suggestion.Entry<? extends Suggest.Suggestion.Entry.Option> e : list) {
 				for (Suggest.Suggestion.Entry.Option option : e) {
 					String str=option.getText().toString();
-					if(suggestList.contains(str)) {
+					if(!suggestList.contains(str)) {
 						suggestList.add(str);
 					}
 				}
