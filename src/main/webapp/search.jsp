@@ -1,3 +1,4 @@
+<%@page import="java.util.regex.Pattern"%>
 <%@page import="io.searchbox.core.Search"%>
 <%@page import="org.elasticsearch.action.search.SearchRequest"%>
 <%@page import="java.util.Calendar"%>
@@ -51,23 +52,29 @@
     EsSearch search = null;
     String keyword = request.getParameter("keyword");
 	if(keyword!=null){
-		int pageCount = request.getParameter("page")==null?1:Integer.parseInt(request.getParameter("page"));
-		search = new EsSearch();
-		search.inseartSearch(keyword);
-		String timeLimit = request.getParameter("timeLimit");
-		if(timeLimit==null){
-			result = search.fullTextSerch(keyword,pageCount);
-		}
-		else{
-			String[] time = timeLimit.split(" - ");
-			result = search.rangeSerch(keyword, pageCount, time[0], time[1]);
+		String pageString = request.getParameter("page");
+		/**判断是不是数字*/
+		Pattern pattern = Pattern.compile("^[\\d]*$");
+		/**如果是数字或者没有这个参数，或者确实是数字才能打印出结果*/
+		if(pageString == null || pattern.matcher(pageString).find()){
+			int pageCount = pageString==null?1:Integer.parseInt(pageString);
+			search = new EsSearch();
+			search.inseartSearch(keyword);
+			String timeLimit = request.getParameter("timeLimit");
+			if(timeLimit==null){
+				result = search.fullTextSerch(keyword,pageCount);
+			}
+			else{
+				String[] time = timeLimit.split(" - ");
+				result = search.rangeSerch(keyword, pageCount, time[0], time[1]);
+			}
 		}
 	}
     %>
 	<div class="clear"></div>
 	<div class="search-result">
 		<div style="margin-left: 16.5%;" class="search-count">
-			IT-Search为您找到相关结果约<%=keyword==null?0:search.getResultNum() %>个
+			IT-Search为您找到相关结果约<%=keyword==null||search==null?0:search.getResultNum() %>个
 		</div>
 		<div class="filter">
 			<input type="text" autocomplete="off" readonly="true" class="demo-input" placeholder="时间不限" id="test6">
@@ -76,6 +83,7 @@
 	<div class="clear"></div>
 	<div>
 		<% 
+		/**结果不为空，按照css样式打印*/
 		if(result!=null)
     	for(int i=0;i<result.size();i++){
     		out.println("<div class=\"result-container\">");
@@ -107,6 +115,7 @@ else{
 	page=parseInt(page);
 }
 totalPage=<%=search==null?0:search.getResultNum()%10==0?search.getResultNum()/10:search.getResultNum()/10+1%>;
+//翻页功能
 if(totalPage<9){
 	for(var i=1;i<totalPage+1;i++){
 		if(i!=page)

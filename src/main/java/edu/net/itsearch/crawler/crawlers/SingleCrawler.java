@@ -30,7 +30,10 @@ public class SingleCrawler extends Thread {
 	private String cssSelector;
 	private String url;
 	private ResultWriterDao linksWriter = null;
-	private Pattern httpRegexPattern = Pattern.compile("http(s)?://.+?/");
+	/**匹配绝对路径根路径，即域名*/
+	private Pattern absoluteRegexPattern = Pattern.compile("http(s)?://.+?/");
+	/**匹配相对路径根路径*/
+	private Pattern relativeRegexPattern = Pattern.compile("http(s)?://.+/");
 
 	public SingleCrawler(String url, String cssSelector, CloseableHttpClient httpClient,
 			ResultWriterDao linksWriter) {
@@ -62,13 +65,15 @@ public class SingleCrawler extends Thread {
 					}
 					String newUrl = null;
 					/**
-					 *  判断href是相对路径还是决定路径，以及是否是传参
+					 *  判断href是相对路径还是决定路径，以及是否有传参，决定新url如何组合
 					 */
 					if(newHref.length()>=1 &&  newHref.charAt(0)=='?') {
+						/**直接问号处截断*/
 						newUrl = this.url.substring(0, this.url.indexOf('?')) + newHref;
 					}
 					else if(newHref.length()>=1 &&  newHref.charAt(0)=='/') {
-						Matcher matcher = httpRegexPattern.matcher(this.url);
+						/**绝对路径去掉href前面的/再加上去*/
+						Matcher matcher = absoluteRegexPattern.matcher(this.url);
 						if(matcher.find()) {
 							String rootUrl = matcher.group(0);
 							newUrl = rootUrl + newHref.substring(1);
@@ -78,7 +83,8 @@ public class SingleCrawler extends Thread {
 						}
 					}
 					else if(newHref.length()>=1 &&  newHref.charAt(0)!='/'){
-						Matcher matcher = httpRegexPattern.matcher(this.url);
+						Matcher matcher = relativeRegexPattern.matcher(this.url);
+						/**相对路径直接添加*/
 						if(matcher.find()) {
 							String rootUrl = matcher.group(0);
 							newUrl = rootUrl + newHref;
