@@ -51,3 +51,7 @@ public class ItSearchInit{
 		System.out.println("初始化完毕");
 	}
 }
+/**
+* git冲突合并演示
+* 这里是rasang的repos
+*/
