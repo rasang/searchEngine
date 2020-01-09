@@ -51,3 +51,7 @@ public class ItSearchInit{
 		System.out.println("初始化完毕");
 	}
 }
+/**
+* git冲突演示
+* 这个是xingkyh的repos
+*/
